@@ -11,11 +11,11 @@ type PrivatePlacementConfigController struct {
 
 type JsonRpcResult struct {
 	Version string `json:"jsonrpc"`
-	Id uint `json:"id"`
+	Id      uint   `json:"id"`
 }
 
 func DefaultJsonRpcResult() *JsonRpcResult {
-	return &JsonRpcResult{"2.0",1}
+	return &JsonRpcResult{"2.0", 1}
 }
 
 type ConfigResult struct {
@@ -24,27 +24,32 @@ type ConfigResult struct {
 }
 
 type Config struct {
-	Index int `json:"round"`
-	EthAmount float64 `json:"ethValue"`
+	Index      int     `json:"round"`
+	EthAmount  float64 `json:"ethValue"`
 	MiniAmount float64 `json:"miniAmount"`
-	Ratio float64 `json:"ratio"`
+	Ratio      float64 `json:"ratio"`
 }
 
-func initConfigResult() (jr *ConfigResult){
-	l:=30
-	jr = &ConfigResult{DefaultJsonRpcResult(),make([]Config,l,l)}
-	for i:=1;i<=l;i++{
-		ethAmount := float64(20+10*(i-1))
-		price := math.Pow(0.93,float64(l-i)) * 0.02
+func initConfigResult() (jr *ConfigResult) {
+	l := 30
+	jr = &ConfigResult{DefaultJsonRpcResult(), make([]Config, l, l)}
+	for i := 1; i <= l; i++ {
+		ethAmount := float64(20 + 10*(i-1))
+		price := math.Pow(0.93, float64(l-i)) * 0.02
 		miniAmount := math.Floor(float64(ethAmount) * 246 / price)
 		ratio := math.Floor(miniAmount / ethAmount)
-		jr.Configs[i-1] = Config{i,ethAmount,miniAmount,ratio}
+		jr.Configs[i-1] = Config{i, ethAmount, miniAmount, ratio}
 	}
 	return
 }
 
+// @Title getConfig
+// @Description get the private placement config
+// @Success 200 {object} controllers.ppconfig.ConfigResult
+// @Failure 404 User not found
+// @router / [get]
 func (c *PrivatePlacementConfigController) Get() {
-	jr:=initConfigResult()
+	jr := initConfigResult()
 	c.Data["json"] = jr
 	c.ServeJSON()
 }

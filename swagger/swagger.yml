@@ -1,0 +1,162 @@
+swagger: "2.0"
+info:
+  title: Miniswap API
+  description: Data related to MINISwap for developers
+  version: 1.0.0
+basePath: /v1
+paths:
+  /ppconfig/:
+    get:
+      tags:
+      - ppconfig
+      description: get the private placement config
+      operationId: PrivatePlacementConfigController.getConfig
+      responses:
+        "200":
+          description: ""
+          schema:
+            $ref: '#/definitions/controllers.ppconfig.ConfigResult'
+        "404":
+          description: User not found
+  /ppinfo/:
+    get:
+      tags:
+      - ppinfo
+      description: get the current private placement info
+      operationId: PrivatePlacementInfoController.getCurrentPrivatepalcementInfo
+      responses:
+        "200":
+          description: ""
+          schema:
+            $ref: '#/definitions/controllers.ppinfo.InfoResult'
+        "404":
+          description: User not found
+  /pptxs/:
+    get:
+      tags:
+      - pptxs
+      description: get the private placement txs
+      operationId: PrivatePlacementTxsController.getPrivatepalcementTransactions
+      parameters:
+      - in: query
+        name: offset
+        description: offset
+        required: true
+        type: integer
+        format: int64
+        default: string
+      - in: query
+        name: limit
+        description: count limit
+        required: true
+        type: integer
+        format: int64
+        default: string
+      responses:
+        "200":
+          description: ""
+          schema:
+            $ref: '#/definitions/controllers.pptxs.TxsResult'
+        "404":
+          description: User not found
+definitions:
+  big.Int:
+    title: Int
+    type: object
+  controllers.Config:
+    title: Config
+    type: object
+    properties:
+      ethValue:
+        type: number
+        format: double
+      miniAmount:
+        type: number
+        format: double
+      ratio:
+        type: number
+        format: double
+      round:
+        type: integer
+        format: int64
+  controllers.JsonRpcResult:
+    title: JsonRpcResult
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int32
+      jsonrpc:
+        type: string
+  controllers.Tx:
+    title: Tx
+    type: object
+    properties:
+      fee:
+        $ref: '#/definitions/big.Int'
+      receive_mini_amount:
+        $ref: '#/definitions/big.Int'
+      send_eth_value:
+        $ref: '#/definitions/big.Int'
+      status:
+        type: string
+      timestamp:
+        type: integer
+        format: int32
+      tx_hash:
+        type: string
+  controllers.ppconfig.ConfigResult:
+    title: ConfigResult
+    type: object
+    properties:
+      Configs:
+        type: array
+        items:
+          $ref: '#/definitions/controllers.Config'
+      id:
+        type: integer
+        format: int32
+      jsonrpc:
+        type: string
+  controllers.ppinfo.InfoResult:
+    title: InfoResult
+    type: object
+    properties:
+      cur_eth_value:
+        type: integer
+        format: int32
+      id:
+        type: integer
+        format: int32
+      jsonrpc:
+        type: string
+      remaining_mini:
+        type: integer
+        format: int32
+      remaining_ration:
+        type: string
+      round:
+        type: integer
+        format: int32
+  controllers.pptxs.TxsResult:
+    title: TxsResult
+    type: object
+    properties:
+      TotalTxCount:
+        type: integer
+        format: int32
+      id:
+        type: integer
+        format: int32
+      jsonrpc:
+        type: string
+      limit:
+        type: integer
+        format: int64
+      offset:
+        type: integer
+        format: int64
+      txs:
+        type: array
+        items:
+          $ref: '#/definitions/controllers.Tx'

@@ -10,15 +10,19 @@ type PrivatePlacementInfoController struct {
 
 type InfoResult struct {
 	*JsonRpcResult
-	CurIndex uint `json:"round"`
-	CurEthValue uint `json:"cur_eth_value"`
+	CurIndex        uint   `json:"round"`
+	CurEthValue     uint   `json:"cur_eth_value"`
 	RemainingRation string `json:"remaining_ration"`
-	RemainingMini uint `json:"remaining_mini"`
-
+	RemainingMini   uint   `json:"remaining_mini"`
 }
 
+// @Title getCurrentPrivatepalcementInfo
+// @Description get the current private placement info
+// @Success 200 {object} controllers.ppinfo.InfoResult
+// @Failure 404 User not found
+// @router / [get]
 func (c *PrivatePlacementInfoController) Get() {
-	ir:=InfoResult{}
+	ir := InfoResult{}
 	ir.JsonRpcResult = DefaultJsonRpcResult()
 	ir.CurIndex = 1
 	ir.CurEthValue = 0
