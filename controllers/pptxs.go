@@ -12,7 +12,7 @@ type PrivatePlacementTxsController struct {
 
 type TxsResult struct {
 	*JsonRpcResult
-	TotalTxCount uint
+	TotalTxCount uint `json:"total_tx_count"`
 	Offset       int  `json:"offset"`
 	Limit        int  `json:"limit"`
 	Txs          []Tx `json:"txs"`
