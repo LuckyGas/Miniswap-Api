@@ -134,7 +134,8 @@ definitions:
         type: integer
         format: int32
       remaining_ration:
-        type: string
+        type: integer
+        format: int32
       round:
         type: integer
         format: int32
