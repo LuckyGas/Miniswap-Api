@@ -205,10 +205,6 @@
             "title": "TxsResult",
             "type": "object",
             "properties": {
-                "TotalTxCount": {
-                    "type": "integer",
-                    "format": "int32"
-                },
                 "id": {
                     "type": "integer",
                     "format": "int32"
@@ -223,6 +219,10 @@
                 "offset": {
                     "type": "integer",
                     "format": "int64"
+                },
+                "total_tx_count": {
+                    "type": "integer",
+                    "format": "int32"
                 },
                 "txs": {
                     "type": "array",
