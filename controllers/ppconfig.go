@@ -1,8 +1,10 @@
 package controllers
 
 import (
+	"fmt"
 	"github.com/astaxie/beego"
 	"math"
+	"math/big"
 )
 
 type PrivatePlacementConfigController struct {
@@ -24,24 +26,34 @@ type ConfigResult struct {
 }
 
 type Config struct {
-	Index      int     `json:"round"`
-	EthAmount  float64 `json:"ethValue"`
-	MiniAmount float64 `json:"miniAmount"`
-	Ratio      float64 `json:"ratio"`
+	Index      int      `json:"round"`
+	EthAmount  *big.Int `json:"ethValue"`
+	MiniAmount *big.Int `json:"miniAmount"`
+	Ratio      *big.Int `json:"ratio"`
 }
 
-func initConfigResult() (jr *ConfigResult) {
-	l := 30
-	jr = &ConfigResult{DefaultJsonRpcResult(), make([]Config, l, l)}
-	for i := 1; i <= l; i++ {
-		ethAmount := float64(20 + 10*(i-1))
-		price := math.Pow(0.93, float64(l-i)) * 0.02
-		miniAmount := math.Floor(float64(ethAmount) * 246 / price)
-		ratio := math.Floor(miniAmount / ethAmount)
-		jr.Configs[i-1] = Config{i, ethAmount, miniAmount, ratio}
+func initConfig() {
+	if len(Configs) == 0 {
+		l := 30
+		Configs = make([]Config, l, l)
+		for i := 1; i <= l; i++ {
+			ethAmount := 20 + 10*(i-1)
+			price := math.Pow(0.93, float64(l-i)) * 0.02
+			miniAmount := math.Floor(float64(ethAmount) * 246 / price)
+			ratio := new(big.Int).SetInt64(int64(math.Floor(miniAmount / float64(ethAmount))))
+			Configs[i-1] = Config{i, new(big.Int).SetInt64(int64(ethAmount)), new(big.Int).SetInt64(int64(miniAmount)), ratio}
+		}
 	}
+}
+
+func GetConfig(index int64) (config Config) {
+	initConfig()
+	config = Configs[index]
+	fmt.Println(config)
 	return
 }
+
+var Configs []Config
 
 // @Title getConfig
 // @Description get the private placement config
@@ -49,7 +61,8 @@ func initConfigResult() (jr *ConfigResult) {
 // @Failure 404 User not found
 // @router / [get]
 func (c *PrivatePlacementConfigController) Get() {
-	jr := initConfigResult()
+	initConfig()
+	jr := ConfigResult{DefaultJsonRpcResult(), Configs}
 	c.Data["json"] = jr
 	c.ServeJSON()
 }

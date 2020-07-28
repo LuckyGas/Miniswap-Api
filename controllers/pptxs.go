@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"github.com/astaxie/beego"
 	"math/big"
 )
@@ -39,7 +38,9 @@ func (c *PrivatePlacementTxsController) Get() {
 	tr.JsonRpcResult = DefaultJsonRpcResult()
 	tr.TotalTxCount = 100
 	tr.Limit, _ = c.GetInt("limit")
-	fmt.Println(tr.Limit)
+	if tr.Limit >= 100 {
+		tr.Limit = 100
+	}
 	tr.Offset, _ = c.GetInt("offset")
 	tr.Txs = make([]Tx, tr.Limit, tr.Limit)
 	for i := 0; i < tr.Limit; i++ {
