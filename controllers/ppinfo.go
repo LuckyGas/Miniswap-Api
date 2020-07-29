@@ -59,7 +59,7 @@ func (c *PrivatePlacementInfoController) Get() {
 	ir.CurEthValue = ethAmount
 	needEth := GetConfig(k - 1).EthAmount
 	needEth = new(big.Int).Mul(needEth, new(big.Int).Exp(big.NewInt(10), big.NewInt(18), nil))
-	ir.RemainingRation = new(big.Int).Div(new(big.Int).Mul(ethAmount, big.NewInt(100)), needEth)
+	ir.RemainingRation = new(big.Int).Sub(big.NewInt(100),new(big.Int).Div(new(big.Int).Mul(ethAmount, big.NewInt(100)), needEth))
 	ir.RemainingMini = new(big.Int).Div(new(big.Int).Mul(ir.RemainingRation, GetConfig(k-1).MiniAmount), big.NewInt(100))
 	c.Data["json"] = ir
 	c.ServeJSON()
